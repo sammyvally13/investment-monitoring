@@ -2,7 +2,6 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: sticky header + categorized card grid, mobile-first stacking */
 :root {
   --navy: #1a2744;
   --navy-deep: #0f1a2e;
@@ -160,10 +159,7 @@ body::before {
   letter-spacing: 0.02em;
 }
 
-.filter-btn:hover {
-  border-color: var(--gold);
-  color: var(--navy);
-}
+.filter-btn:hover { border-color: var(--gold); color: var(--navy); }
 
 .filter-btn.active {
   background: var(--navy);
@@ -173,15 +169,11 @@ body::before {
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .filter-btn.active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: #111;
+    background: var(--gold); border-color: var(--gold); color: #111;
   }
 }
 :root[data-theme="dark"] .filter-btn.active {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: #111;
+  background: var(--gold); border-color: var(--gold); color: #111;
 }
 
 .sort-select {
@@ -213,9 +205,7 @@ body::before {
   letter-spacing: 0.03em;
 }
 
-.category-label:first-child {
-  margin-top: 0;
-}
+.category-label:first-child { margin-top: 0; }
 
 .fund-grid {
   display: grid;
@@ -234,9 +224,7 @@ body::before {
   transition: border-color 0.15s ease;
 }
 
-.fund-card:hover {
-  border-color: var(--gold);
-}
+.fund-card:hover { border-color: var(--gold); }
 
 .fund-name {
   font-family: var(--font-display);
@@ -301,16 +289,6 @@ body::before {
 .return-cell .value.neg { color: var(--negative); }
 .return-cell .value.na { color: var(--text-muted); font-weight: 400; font-size: 0.8rem; }
 
-.return-cell.highlight {
-  background: var(--positive-bg);
-  border: 1px solid var(--positive);
-}
-
-.return-cell.highlight-neg {
-  background: var(--negative-bg);
-  border: 1px solid var(--negative);
-}
-
 .prices-row {
   display: flex;
   gap: 16px;
@@ -318,9 +296,7 @@ body::before {
   color: var(--text-secondary);
 }
 
-.prices-row span {
-  font-variant-numeric: tabular-nums;
-}
+.prices-row span { font-variant-numeric: tabular-nums; }
 
 .prices-row .label {
   color: var(--text-muted);
@@ -336,8 +312,62 @@ body::before {
   font-weight: 600;
 }
 
-.fund-link:hover {
-  text-decoration: underline;
+.fund-link:hover { text-decoration: underline; }
+
+/* Expandable details */
+.fund-details-toggle {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--gold);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.fund-details-toggle:hover { text-decoration: underline; }
+.fund-details-toggle .chevron { transition: transform 0.2s; display: inline-block; }
+.fund-details-toggle.open .chevron { transform: rotate(90deg); }
+
+.fund-details-content {
+  display: none;
+  padding: 10px 0 4px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  grid-column: 1 / -1;
+}
+.fund-details-content.show { display: block; }
+
+.fund-details-content .objective { margin-bottom: 8px; }
+.fund-details-content .holdings-title {
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.fund-details-content .holdings-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.fund-details-content .holdings-list li {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding: 2px 0;
+}
+.fund-details-content .holdings-list li::before {
+  content: "•";
+  color: var(--gold);
+  margin-right: 5px;
 }
 
 /* Table view */
@@ -369,25 +399,15 @@ body::before {
   background: var(--bg);
 }
 
-.table-view th.sortable {
-  cursor: pointer;
-  user-select: none;
-}
-
-.table-view th.sortable:hover {
-  color: var(--gold);
-}
+.table-view th.sortable { cursor: pointer; user-select: none; }
+.table-view th.sortable:hover { color: var(--gold); }
 
 .table-view th .sort-arrow {
   display: inline-block;
   margin-left: 3px;
   opacity: 0.3;
 }
-
-.table-view th.sorted .sort-arrow {
-  opacity: 1;
-  color: var(--gold);
-}
+.table-view th.sorted .sort-arrow { opacity: 1; color: var(--gold); }
 
 .table-view td {
   padding: 10px;
@@ -409,9 +429,8 @@ body::before {
 .table-view td.neg { color: var(--negative); font-weight: 600; }
 .table-view td.na-cell { color: var(--text-muted); }
 
-.table-view tr:hover td {
-  background: var(--surface-alt);
-}
+.table-view tr:hover td { background: var(--surface-alt); }
+.table-view tr.detail-row:hover td { background: var(--surface); }
 
 .table-view .cat-row td {
   font-family: var(--font-display);
@@ -422,6 +441,63 @@ body::before {
   padding-top: 16px;
   background: none;
 }
+
+/* Table expandable detail row */
+.table-view .detail-row td {
+  padding: 0;
+  border-bottom: 1px solid var(--border);
+}
+.table-view .detail-row .detail-inner {
+  display: none;
+  padding: 8px 10px 12px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.table-view .detail-row .detail-inner.show { display: block; }
+.table-view .detail-inner .objective { margin-bottom: 6px; }
+.table-view .detail-inner .holdings-title {
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+.table-view .detail-inner .holdings-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.table-view .detail-inner .holdings-list li {
+  font-size: 0.73rem;
+  padding: 1px 0;
+}
+.table-view .detail-inner .holdings-list li::before {
+  content: "•";
+  color: var(--gold);
+  margin-right: 4px;
+}
+
+.table-view .expand-btn {
+  font-family: var(--font-body);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gold);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.table-view .expand-btn:hover { text-decoration: underline; }
+.table-view .expand-btn .chevron { transition: transform 0.2s; display: inline-block; }
+.table-view .expand-btn.open .chevron { transform: rotate(90deg); }
 
 /* View toggle */
 .view-toggle {
@@ -449,20 +525,15 @@ body::before {
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .view-toggle button.active {
-    background: var(--gold);
-    color: #111;
+    background: var(--gold); color: #111;
   }
 }
 :root[data-theme="dark"] .view-toggle button.active {
-  background: var(--gold);
-  color: #111;
+  background: var(--gold); color: #111;
 }
 
-.view-toggle button + button {
-  border-left: 1.5px solid var(--border);
-}
+.view-toggle button + button { border-left: 1.5px solid var(--border); }
 
-/* Desktop: side-by-side returns */
 @media (min-width: 640px) {
   .fund-card {
     grid-template-columns: 220px 1fr auto;
@@ -470,22 +541,13 @@ body::before {
     gap: 16px;
     padding: 12px 16px;
   }
-  .fund-card .fund-info {
-    min-width: 0;
-  }
-  .returns-row {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .prices-col {
-    text-align: right;
-    min-width: 80px;
-  }
+  .fund-card .fund-info { min-width: 0; }
+  .returns-row { grid-template-columns: repeat(4, 1fr); }
+  .prices-col { text-align: right; min-width: 80px; }
 }
 
 @media (min-width: 900px) {
-  .returns-row {
-    grid-template-columns: repeat(7, 1fr);
-  }
+  .returns-row { grid-template-columns: repeat(7, 1fr); }
 }
 
 .disclaimer {
@@ -497,7 +559,6 @@ body::before {
   line-height: 1.5;
 }
 
-/* Search */
 .search-input {
   font-family: var(--font-body);
   font-size: 0.8rem;
@@ -509,14 +570,8 @@ body::before {
   width: 160px;
   outline: none;
 }
-
-.search-input:focus {
-  border-color: var(--gold);
-}
-
-.search-input::placeholder {
-  color: var(--text-muted);
-}
+.search-input:focus { border-color: var(--gold); }
+.search-input::placeholder { color: var(--text-muted); }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
@@ -532,15 +587,15 @@ body::before {
     </div>
     <div class="controls">
       <div class="view-toggle">
-        <button class="active" onclick="setView('cards')">Cards</button>
-        <button onclick="setView('table')">Table</button>
+        <button onclick="setView('cards')">Cards</button>
+        <button class="active" onclick="setView('table')">Table</button>
       </div>
       <button class="filter-btn active" data-cat="all" onclick="filterCat('all')">All</button>
       <button class="filter-btn" data-cat="Core" onclick="filterCat('Core')">Core</button>
       <button class="filter-btn" data-cat="Satellite" onclick="filterCat('Satellite')">Satellite</button>
       <button class="filter-btn" data-cat="Dividend" onclick="filterCat('Dividend')">Dividend</button>
       <button class="filter-btn" data-cat="Cash" onclick="filterCat('Cash')">Cash</button>
-      <input type="text" class="search-input" placeholder="Search funds…" id="searchInput" oninput="filterFunds()">
+      <input type="text" class="search-input" placeholder="Search funds..." id="searchInput" oninput="filterFunds()">
       <select class="sort-select" id="sortSelect" onchange="sortFunds()">
         <option value="default">Sort: Default</option>
         <option value="1y-desc">1Y Return ↓</option>
@@ -549,15 +604,15 @@ body::before {
         <option value="3y-asc">3Y Return ↑</option>
         <option value="5y-desc">5Y Return ↓</option>
         <option value="5y-asc">5Y Return ↑</option>
-        <option value="name-asc">Name A–Z</option>
+        <option value="name-asc">Name A-Z</option>
       </select>
     </div>
   </div>
 </div>
 
 <div class="content">
-  <div id="cardView"></div>
-  <div class="table-view" id="tableView"></div>
+  <div id="cardView" style="display:none"></div>
+  <div class="table-view" id="tableView" style="display:block"></div>
   <div class="disclaimer">
     Source: Prudential Singapore. Past performance is not indicative of future performance. Returns are calculated on a bid-to-bid basis with net income reinvested. Historical returns exceeding a one-year period are annualised. Data sourced from FE fundinfo and Morningstar.
   </div>
@@ -569,79 +624,113 @@ const FUNDS = [
     name: "PRULink America Fund", code: "CXB1", category: "Core",
     slug: "prulink-america-fund",
     risk: "Higher Risk", bidPrice: "3.0194", offerPrice: "3.1783",
-    returns: { "1m": "+0.15%", "6m": "+1.99%", "1y": "+6.58%", "3y": "+7.66%", "5y": "+5.37%", "10y": "+6.52%", "inception": "+5.56%" }
+    objective: "Invest principally in US equity securities.",
+    holdings: ["Alphabet Inc", "Wells Fargo & Co", "FedEx Corp", "Elevance Health Inc", "McKesson Corp"],
+    returns: { "1y": "+6.58%", "3y": "+7.66%", "5y": "+5.37%", "10y": "+6.52%", "inception": "+5.56%" }
   },
   {
     name: "PRULink Global Equity Growth (Accumulation)", code: "AUM2H", category: "Core",
     slug: "prulink-global-equity-growth-accumulation",
     risk: "Higher Risk", bidPrice: "1.2780", offerPrice: "1.3453",
-    returns: { "1m": "+1.88%", "6m": "+1.01%", "1y": "+2.28%", "3y": "+13.14%" }
+    objective: "To provide superior capital growth by investing primarily in shares of companies with strong growth potential.",
+    holdings: ["Nvidia Corporation", "Amazon.com Inc", "Intuitive Surgical Inc", "Eli Lilly & Company", "Boston Scientific Corporation"],
+    returns: { "1y": "+2.28%", "3y": "+13.14%" }
   },
   {
     name: "PRULink Global Technology Fund", code: "CXC2", category: "Core",
     slug: "prulink-global-technology-fund",
     risk: "Higher Risk", bidPrice: "5.7486", offerPrice: "6.0512",
-    returns: { "1m": "+4.17%", "6m": "+18.42%", "1y": "+25.07%", "3y": "+29.53%", "5y": "+14.85%", "10y": "+19.01%", "inception": "+7.33%" }
+    objective: "Maximise long-term total returns through investment in equities and equity-related securities of companies around the world with innovative products, processes or services.",
+    holdings: ["Microsoft Corporation", "Nvidia Corporation", "Alphabet Inc Class A", "Meta Platforms Inc", "Amazon.com Inc"],
+    returns: { "1y": "+25.07%", "3y": "+29.53%", "5y": "+14.85%", "10y": "+19.01%", "inception": "+7.33%" }
   },
   {
     name: "PRULink India Opportunity Equity Fund (Accumulation)", code: "CAFAL", category: "Core",
     slug: "prulink-india-opportunity-equity-fund-accumulation",
     risk: "Higher Risk", bidPrice: "0.8930", offerPrice: "0.9399",
-    returns: { "1m": "-0.63%", "6m": "-0.23%", "1y": "-6.00%" }
+    objective: "To achieve capital appreciation by investing in equity securities of companies located in India.",
+    holdings: ["HDFC Bank Ltd", "Mahindra & Mahindra Ltd", "ICICI Bank Ltd", "Eternal Ltd", "Tata Motors Passenger Vehicles"],
+    returns: { "1y": "-6.00%" }
   },
   {
     name: "PRULink Islamic Global Equity Index Fund (Accumulation)", code: "ASHIL", category: "Core",
     slug: "prulink-islamic-global-equity-index-fund-accumulation",
     risk: "Higher Risk", bidPrice: "1.6810", offerPrice: "1.7695",
-    returns: { "1m": "+3.80%", "6m": "+13.81%", "1y": "+19.55%", "3y": "+21.05%", "5y": "+18.67%" }
+    objective: "Track the performance of a world index through investment in a diversified portfolio of securities which meets Islamic investment principles.",
+    holdings: ["Microsoft Corp", "Apple Inc", "NVIDIA Corp", "Alphabet Inc", "Amazon.com Inc"],
+    returns: { "1y": "+19.55%", "3y": "+21.05%", "5y": "+18.67%" }
   },
   {
     name: "PRULink Singapore Growth Fund", code: "KEL7", category: "Core",
     slug: "prulink-singapore-growth-fund",
     risk: "Higher Risk", bidPrice: "2.6117", offerPrice: "2.7492",
-    returns: { "1m": "-4.29%", "6m": "+7.05%", "1y": "+18.32%", "3y": "+20.06%", "5y": "+11.70%", "10y": "+9.30%", "inception": "+6.44%" }
+    objective: "Aims to provide unitholders with medium to long-term capital growth from a portfolio of Singapore Equities through investing all of its assets in the abrdn Singapore Equity Fund.",
+    holdings: ["DBS Group Holdings Ltd", "Oversea-Chinese Banking Corp Ltd", "United Overseas Bank Ltd", "Singapore Telecommunications Ltd", "Sembcorp Industries Ltd"],
+    returns: { "1y": "+18.32%", "3y": "+20.06%", "5y": "+11.70%", "10y": "+9.30%", "inception": "+6.44%" }
   },
   {
-    name: "PRULink Asian Equity Fund", code: "CXB2", category: "Satellite",
+    name: "PRULink Asian Equity Fund", code: "CXB2", category: "Core",
     slug: "prulink-asian-equity-fund",
     risk: "Higher Risk", bidPrice: "3.5967", offerPrice: "3.7860",
-    returns: { "1m": "-1.71%", "6m": "+7.27%", "1y": "+27.79%", "3y": "+22.02%", "5y": "+8.22%", "10y": "+6.20%", "inception": "+4.40%" }
+    objective: "To maximise long-term total return by investing primarily in equity and equity-related securities of companies in the Asia Pacific ex-Japan Region.",
+    holdings: ["Samsung Electronics Co Ltd", "Taiwan Semiconductor Manufacturing", "SK hynix Inc.", "Tencent Holdings Ltd", "BHP Group Ltd"],
+    returns: { "1y": "+27.79%", "3y": "+22.02%", "5y": "+8.22%", "10y": "+6.20%", "inception": "+4.40%" }
   },
   {
-    name: "PRULink Emerging Markets Fund", code: "CXB6", category: "Satellite",
+    name: "PRULink Emerging Markets Fund", code: "CXB6", category: "Core",
     slug: "prulink-emerging-markets-fund",
     risk: "Higher Risk", bidPrice: "2.7368", offerPrice: "2.8809",
-    returns: { "1m": "-1.90%", "6m": "+6.10%", "1y": "+26.70%", "3y": "+18.99%", "5y": "+2.82%", "10y": "+7.64%", "inception": "+5.08%" }
+    objective: "To provide long-term capital growth by investing primarily in emerging markets companies.",
+    holdings: ["SK Hynix", "TSMC", "Samsung Electronics", "Tencent", "Delta Electronics"],
+    returns: { "1y": "+26.70%", "3y": "+18.99%", "5y": "+2.82%", "10y": "+7.64%", "inception": "+5.08%" }
   },
   {
     name: "PRULink Greater China Fund", code: "HSP3", category: "Satellite",
     slug: "prulink-greater-china-fund",
     risk: "Higher Risk", bidPrice: "2.5953", offerPrice: "2.7319",
-    returns: { "1m": "+0.91%", "6m": "+4.80%", "1y": "+9.25%", "3y": "+13.57%", "5y": "+0.10%", "10y": "+7.39%", "inception": "+6.14%" }
+    objective: "Provide capital growth primarily through investment in equity securities of the People's Republic of China, Hong Kong SAR and Taiwan companies.",
+    holdings: ["Taiwan Semiconductor", "Tencent Holdings Ltd", "Alibaba Group Holding Ltd", "AIA Group Ltd", "MediaTek Inc"],
+    returns: { "1y": "+9.25%", "3y": "+13.57%", "5y": "+0.10%", "10y": "+7.39%", "inception": "+6.14%" }
   },
   {
     name: "PRULink Pan European Fund", code: "CXC4", category: "Satellite",
     slug: "prulink-pan-european-fund",
     risk: "Higher Risk", bidPrice: "2.3228", offerPrice: "2.4451",
-    returns: { "1m": "-0.43%", "6m": "+1.63%", "1y": "+2.82%", "3y": "+9.91%", "5y": "+5.19%", "10y": "+7.17%", "inception": "+3.58%" }
+    objective: "Maximise long-term total return by investing in equity and equity-related securities of companies incorporated or operating principally in Europe (including UK).",
+    holdings: ["Novo Nordisk A/S", "Schneider Electric SE", "AIB Group Plc", "Scout24 SE", "SAP SE"],
+    returns: { "1y": "+2.82%", "3y": "+9.91%", "5y": "+5.19%", "10y": "+7.17%", "inception": "+3.58%" }
+  },
+  {
+    name: "PRULink China India Fund", code: "CXB4", category: "Satellite",
+    slug: "prulink-china-india-fund",
+    risk: "Higher Risk", bidPrice: "4.0650", offerPrice: "4.2789",
+    objective: "To maximise long-term total return by investing primarily in equity and equity-related instruments of corporations with significant business in the People's Republic of China and India.",
+    holdings: ["Tencent Holdings Ltd", "Alibaba Group Holding Ltd", "ICICI Bank Ltd", "Reliance Industries Ltd", "China Construction Bank Corp"],
+    returns: { "1y": "-13.10%", "3y": "+4.17%", "5y": "-1.79%", "10y": "+4.65%", "inception": "+6.77%" }
   },
   {
     name: "PRULink US Dividend Wealth Fund (Distribution)", code: "AL077", category: "Dividend",
     slug: "prulink-us-dividend-wealth-fund-distribution",
     risk: "Higher Risk", bidPrice: "0.9789", offerPrice: "1.0304",
-    returns: { "1m": "-0.58%", "6m": "+0.15%", "1y": "+2.74%", "3y": "+8.47%", "5y": "+7.52%" }
+    objective: "Provide long term capital growth and income by investing in corporate debt securities and equities of US and/or Canadian equity and bond markets.",
+    holdings: ["Microsoft Corp", "Apple Inc", "Amazon.com Inc", "Nvidia Corp", "Wells Fargo & Company"],
+    returns: { "1y": "+2.74%", "3y": "+8.47%", "5y": "+7.52%" }
   },
   {
     name: "PRULink StrategicInvest Income Fund (Distribution)", code: "BWVHD", category: "Dividend",
     slug: "prulink-strategicinvest-income-fund-distribution",
     risk: "Medium to Higher Risk", bidPrice: "0.9480", offerPrice: "0.9979",
-    returns: { "1m": "-2.14%", "6m": "-0.33%", "1y": "+3.49%", "3y": "+4.02%" }
+    objective: "Aims to provide long term capital growth and income by investing in a diversified portfolio of Underlying Funds.",
+    holdings: [],
+    returns: { "1y": "+3.49%", "3y": "+4.02%" }
   },
   {
     name: "PRULink Singapore Cash Fund", code: "CXC6", category: "Cash",
     slug: "prulink-singapore-cash-fund",
     risk: "Lower Risk", bidPrice: "1.6146", offerPrice: "1.6146",
-    returns: { "1m": "+0.07%", "6m": "+0.53%", "1y": "+1.08%", "3y": "+2.40%", "5y": "+2.30%", "10y": "+1.64%", "inception": "+1.56%" }
+    objective: "Preserve principal value and maintain a high degree of liquidity while seeking to provide returns higher than those offered by Singapore dollar short-term bank deposits.",
+    holdings: ["MAS Bill Maspsp 07/19/24", "MAS Bill Maspsp 07/05/24", "MAS Bill Maspsp 08/30/24", "MAS Bill Maspsp 08/16/24", "MAS Bill Maspsp 08/02/24"],
+    returns: { "1y": "+1.08%", "3y": "+2.40%", "5y": "+2.30%", "10y": "+1.64%", "inception": "+1.56%" }
   }
 ];
 
@@ -650,7 +739,7 @@ const PERIOD_LABELS = { '1y': '1Y', '3y': '3Y', '5y': '5Y', '10y': '10Y', 'incep
 const CAT_ORDER = ['Core', 'Satellite', 'Dividend', 'Cash'];
 
 let currentFilter = 'all';
-let currentView = 'cards';
+let currentView = 'table';
 let currentSort = 'default';
 let searchTerm = '';
 
@@ -694,15 +783,19 @@ function getFilteredFunds() {
   return funds;
 }
 
+function renderHoldingsList(holdings) {
+  if (!holdings || holdings.length === 0) return '';
+  return `<div class="holdings-title">Top 5 Holdings</div>
+    <ul class="holdings-list">${holdings.map(h => `<li>${h}</li>`).join('')}</ul>`;
+}
+
 function renderCards() {
   const funds = getFilteredFunds();
   const container = document.getElementById('cardView');
 
   if (currentSort !== 'default' || currentFilter !== 'all') {
-    // Flat list when sorting or filtering
     container.innerHTML = funds.map(f => renderCard(f)).join('');
   } else {
-    // Grouped by category
     let html = '';
     for (const cat of CAT_ORDER) {
       const catFunds = funds.filter(f => f.category === cat);
@@ -716,6 +809,7 @@ function renderCards() {
 
 function renderCard(f) {
   const riskClass = f.risk.includes('Lower') ? 'lower' : (f.risk.includes('Higher') ? 'higher' : '');
+  const id = 'card-' + f.code;
   return `
     <div class="fund-card">
       <div class="fund-info">
@@ -723,6 +817,7 @@ function renderCard(f) {
         <div class="fund-meta">
           <span class="risk-badge ${riskClass}">${f.risk}</span>
           <a href="${fundUrl(f)}" target="_blank" rel="noopener" class="fund-link">View on Prudential →</a>
+          <button class="fund-details-toggle" onclick="toggleCardDetail('${id}', this)"><span class="chevron">▶</span> Fund Info</button>
         </div>
       </div>
       <div class="returns-row">
@@ -738,8 +833,18 @@ function renderCard(f) {
         <div><span class="label">Bid</span> <span>$${f.bidPrice}</span></div>
         <div><span class="label">Offer</span> <span>$${f.offerPrice}</span></div>
       </div>
+      <div class="fund-details-content" id="${id}">
+        <div class="objective">${f.objective}</div>
+        ${renderHoldingsList(f.holdings)}
+      </div>
     </div>
   `;
+}
+
+function toggleCardDetail(id, btn) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+  btn.classList.toggle('open');
 }
 
 function renderTable() {
@@ -760,7 +865,7 @@ function renderTable() {
     for (const cat of CAT_ORDER) {
       const catFunds = funds.filter(f => f.category === cat);
       if (catFunds.length === 0) continue;
-      html += `<tr class="cat-row"><td colspan="8">${cat}</td></tr>`;
+      html += `<tr class="cat-row"><td colspan="6">${cat}</td></tr>`;
       for (const f of catFunds) {
         html += renderTableRow(f);
       }
@@ -776,8 +881,12 @@ function renderTable() {
 }
 
 function renderTableRow(f) {
+  const id = 'tbl-' + f.code;
   return `<tr>
-    <td><a href="${fundUrl(f)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${f.name}</a></td>
+    <td>
+      <a href="${fundUrl(f)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${f.name}</a>
+      <button class="expand-btn" onclick="toggleTableDetail('${id}', this)"><span class="chevron">▶</span> Info</button>
+    </td>
     ${['1y','3y','5y','10y'].map(p => {
       const val = f.returns[p];
       if (!val) return '<td class="na-cell">—</td>';
@@ -785,7 +894,17 @@ function renderTableRow(f) {
       return `<td class="${num >= 0 ? 'pos' : 'neg'}">${val}</td>`;
     }).join('')}
     <td>$${f.bidPrice}</td>
-  </tr>`;
+  </tr>
+  <tr class="detail-row"><td colspan="6"><div class="detail-inner" id="${id}">
+    <div class="objective">${f.objective}</div>
+    ${renderHoldingsList(f.holdings)}
+  </div></td></tr>`;
+}
+
+function toggleTableDetail(id, btn) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+  btn.classList.toggle('open');
 }
 
 function sortByCol(key) {
@@ -832,6 +951,5 @@ function render() {
   renderTable();
 }
 
-// Initial render
 render();
 </script>
