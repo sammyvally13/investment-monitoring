@@ -645,8 +645,8 @@ const FUNDS = [
   }
 ];
 
-const PERIODS = ['6m', '1y', '3y', '5y', '10y', 'inception'];
-const PERIOD_LABELS = { '6m': '6M', '1y': '1Y', '3y': '3Y', '5y': '5Y', '10y': '10Y', 'inception': 'Since Inception' };
+const PERIODS = ['1y', '3y', '5y', '10y', 'inception'];
+const PERIOD_LABELS = { '1y': '1Y', '3y': '3Y', '5y': '5Y', '10y': '10Y', 'inception': 'Since Inception' };
 const CAT_ORDER = ['Core', 'Satellite', 'Dividend', 'Cash'];
 
 let currentFilter = 'all';
@@ -749,7 +749,6 @@ function renderTable() {
   let html = `<table>
     <thead><tr>
       <th>Fund</th>
-      <th class="sortable" onclick="sortByCol('6m')">6M <span class="sort-arrow">↕</span></th>
       <th class="sortable" onclick="sortByCol('1y')">1Y <span class="sort-arrow">↕</span></th>
       <th class="sortable" onclick="sortByCol('3y')">3Y <span class="sort-arrow">↕</span></th>
       <th class="sortable" onclick="sortByCol('5y')">5Y <span class="sort-arrow">↕</span></th>
@@ -779,7 +778,7 @@ function renderTable() {
 function renderTableRow(f) {
   return `<tr>
     <td><a href="${fundUrl(f)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${f.name}</a></td>
-    ${['6m','1y','3y','5y','10y'].map(p => {
+    ${['1y','3y','5y','10y'].map(p => {
       const val = f.returns[p];
       if (!val) return '<td class="na-cell">—</td>';
       const num = parseReturn(val);
