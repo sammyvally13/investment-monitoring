@@ -1,0 +1,838 @@
+<title>PRULink Fund Performance</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky header + categorized card grid, mobile-first stacking */
+:root {
+  --navy: #1a2744;
+  --navy-deep: #0f1a2e;
+  --gold: #c9a55c;
+  --gold-light: #e8d5a8;
+  --cream: #faf7f2;
+  --cream-mid: #f0ebe2;
+  --text-primary: #1a2744;
+  --text-secondary: #5a6678;
+  --text-muted: #8c95a4;
+  --surface: #ffffff;
+  --surface-alt: #f7f4ef;
+  --border: #e8e2d8;
+  --positive: #1a7a4c;
+  --positive-bg: #e8f5ee;
+  --negative: #c4423c;
+  --negative-bg: #fceae9;
+  --bg: var(--cream);
+  --fg: var(--text-primary);
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --navy: #c5cfe0;
+    --navy-deep: #e8ecf2;
+    --gold: #d4b06a;
+    --gold-light: #8a7542;
+    --cream: #0f1218;
+    --cream-mid: #1a1f2a;
+    --text-primary: #e2e6ec;
+    --text-secondary: #9aa4b4;
+    --text-muted: #6b7585;
+    --surface: #161b26;
+    --surface-alt: #1e2433;
+    --border: #2a3244;
+    --positive: #4eca8a;
+    --positive-bg: #0f2a1e;
+    --negative: #f07872;
+    --negative-bg: #2a1210;
+    --bg: var(--cream);
+    --fg: var(--text-primary);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --navy: #c5cfe0;
+  --navy-deep: #e8ecf2;
+  --gold: #d4b06a;
+  --gold-light: #8a7542;
+  --cream: #0f1218;
+  --cream-mid: #1a1f2a;
+  --text-primary: #e2e6ec;
+  --text-secondary: #9aa4b4;
+  --text-muted: #6b7585;
+  --surface: #161b26;
+  --surface-alt: #1e2433;
+  --border: #2a3244;
+  --positive: #4eca8a;
+  --positive-bg: #0f2a1e;
+  --negative: #f07872;
+  --negative-bg: #2a1210;
+  --bg: var(--cream);
+  --fg: var(--text-primary);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--bg);
+}
+
+.header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 9;
+  background: var(--bg);
+  padding-block: 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.header h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: var(--navy);
+  margin: 0;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.header-meta .date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gold);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.filter-btn {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  letter-spacing: 0.02em;
+}
+
+.filter-btn:hover {
+  border-color: var(--gold);
+  color: var(--navy);
+}
+
+.filter-btn.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .filter-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #111;
+  }
+}
+:root[data-theme="dark"] .filter-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #111;
+}
+
+.sort-select {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  padding: 5px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-block: 20px 40px;
+}
+
+.category-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin: 24px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.03em;
+}
+
+.category-label:first-child {
+  margin-top: 0;
+}
+
+.fund-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.fund-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  transition: border-color 0.15s ease;
+}
+
+.fund-card:hover {
+  border-color: var(--gold);
+}
+
+.fund-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--navy);
+  line-height: 1.3;
+}
+
+.fund-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  align-items: center;
+}
+
+.fund-meta .risk-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 7px;
+  border-radius: 3px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+}
+
+.fund-meta .risk-badge.higher { color: var(--negative); }
+.fund-meta .risk-badge.lower { color: var(--positive); }
+
+.returns-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 6px;
+}
+
+.return-cell {
+  text-align: center;
+  padding: 6px 4px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+}
+
+.return-cell .period {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.return-cell .value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.return-cell .value.pos { color: var(--positive); }
+.return-cell .value.neg { color: var(--negative); }
+.return-cell .value.na { color: var(--text-muted); font-weight: 400; font-size: 0.8rem; }
+
+.return-cell.highlight {
+  background: var(--positive-bg);
+  border: 1px solid var(--positive);
+}
+
+.return-cell.highlight-neg {
+  background: var(--negative-bg);
+  border: 1px solid var(--negative);
+}
+
+.prices-row {
+  display: flex;
+  gap: 16px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.prices-row span {
+  font-variant-numeric: tabular-nums;
+}
+
+.prices-row .label {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fund-link {
+  font-size: 0.72rem;
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.fund-link:hover {
+  text-decoration: underline;
+}
+
+/* Table view */
+.table-view {
+  display: none;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.table-view table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  min-width: 700px;
+}
+
+.table-view th {
+  text-align: left;
+  padding: 8px 10px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+}
+
+.table-view th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.table-view th.sortable:hover {
+  color: var(--gold);
+}
+
+.table-view th .sort-arrow {
+  display: inline-block;
+  margin-left: 3px;
+  opacity: 0.3;
+}
+
+.table-view th.sorted .sort-arrow {
+  opacity: 1;
+  color: var(--gold);
+}
+
+.table-view td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.table-view td:first-child {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--navy);
+  white-space: normal;
+  min-width: 180px;
+}
+
+.table-view td.pos { color: var(--positive); font-weight: 600; }
+.table-view td.neg { color: var(--negative); font-weight: 600; }
+.table-view td.na-cell { color: var(--text-muted); }
+
+.table-view tr:hover td {
+  background: var(--surface-alt);
+}
+
+.table-view .cat-row td {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--gold);
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--gold-light);
+  padding-top: 16px;
+  background: none;
+}
+
+/* View toggle */
+.view-toggle {
+  display: flex;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.view-toggle button {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border: none;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.view-toggle button.active {
+  background: var(--navy);
+  color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .view-toggle button.active {
+    background: var(--gold);
+    color: #111;
+  }
+}
+:root[data-theme="dark"] .view-toggle button.active {
+  background: var(--gold);
+  color: #111;
+}
+
+.view-toggle button + button {
+  border-left: 1.5px solid var(--border);
+}
+
+/* Desktop: side-by-side returns */
+@media (min-width: 640px) {
+  .fund-card {
+    grid-template-columns: 220px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+  }
+  .fund-card .fund-info {
+    min-width: 0;
+  }
+  .returns-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .prices-col {
+    text-align: right;
+    min-width: 80px;
+  }
+}
+
+@media (min-width: 900px) {
+  .returns-row {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+.disclaimer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Search */
+.search-input {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--fg);
+  width: 160px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--gold);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>PRULink Fund Performance</h1>
+    <div class="header-meta">
+      <span class="date-badge">As of 14 Oct 2026</span>
+      <span>Bid-to-bid returns · Annualised where &gt;1 year</span>
+    </div>
+    <div class="controls">
+      <div class="view-toggle">
+        <button class="active" onclick="setView('cards')">Cards</button>
+        <button onclick="setView('table')">Table</button>
+      </div>
+      <button class="filter-btn active" data-cat="all" onclick="filterCat('all')">All</button>
+      <button class="filter-btn" data-cat="Core" onclick="filterCat('Core')">Core</button>
+      <button class="filter-btn" data-cat="Satellite" onclick="filterCat('Satellite')">Satellite</button>
+      <button class="filter-btn" data-cat="Dividend" onclick="filterCat('Dividend')">Dividend</button>
+      <button class="filter-btn" data-cat="Cash" onclick="filterCat('Cash')">Cash</button>
+      <input type="text" class="search-input" placeholder="Search funds…" id="searchInput" oninput="filterFunds()">
+      <select class="sort-select" id="sortSelect" onchange="sortFunds()">
+        <option value="default">Sort: Default</option>
+        <option value="1y-desc">1Y Return ↓</option>
+        <option value="1y-asc">1Y Return ↑</option>
+        <option value="3y-desc">3Y Return ↓</option>
+        <option value="3y-asc">3Y Return ↑</option>
+        <option value="5y-desc">5Y Return ↓</option>
+        <option value="5y-asc">5Y Return ↑</option>
+        <option value="name-asc">Name A–Z</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <div id="cardView"></div>
+  <div class="table-view" id="tableView"></div>
+  <div class="disclaimer">
+    Source: Prudential Singapore. Past performance is not indicative of future performance. Returns are calculated on a bid-to-bid basis with net income reinvested. Historical returns exceeding a one-year period are annualised. Data sourced from FE fundinfo and Morningstar.
+  </div>
+</div>
+
+<script>
+const FUNDS = [
+  {
+    name: "PRULink America Fund", code: "CXB1", category: "Core",
+    slug: "prulink-america-fund",
+    risk: "Higher Risk", bidPrice: "3.0194", offerPrice: "3.1783",
+    returns: { "1m": "+0.15%", "6m": "+1.99%", "1y": "+6.58%", "3y": "+7.66%", "5y": "+5.37%", "10y": "+6.52%", "inception": "+5.56%" }
+  },
+  {
+    name: "PRULink Global Equity Growth (Accumulation)", code: "AUM2H", category: "Core",
+    slug: "prulink-global-equity-growth-accumulation",
+    risk: "Higher Risk", bidPrice: "1.2780", offerPrice: "1.3453",
+    returns: { "1m": "+1.88%", "6m": "+1.01%", "1y": "+2.28%", "3y": "+13.14%" }
+  },
+  {
+    name: "PRULink Global Technology Fund", code: "CXC2", category: "Core",
+    slug: "prulink-global-technology-fund",
+    risk: "Higher Risk", bidPrice: "5.7486", offerPrice: "6.0512",
+    returns: { "1m": "+4.17%", "6m": "+18.42%", "1y": "+25.07%", "3y": "+29.53%", "5y": "+14.85%", "10y": "+19.01%", "inception": "+7.33%" }
+  },
+  {
+    name: "PRULink India Opportunity Equity Fund (Accumulation)", code: "CAFAL", category: "Core",
+    slug: "prulink-india-opportunity-equity-fund-accumulation",
+    risk: "Higher Risk", bidPrice: "0.8930", offerPrice: "0.9399",
+    returns: { "1m": "-0.63%", "6m": "-0.23%", "1y": "-6.00%" }
+  },
+  {
+    name: "PRULink Islamic Global Equity Index Fund (Accumulation)", code: "ASHIL", category: "Core",
+    slug: "prulink-islamic-global-equity-index-fund-accumulation",
+    risk: "Higher Risk", bidPrice: "1.6810", offerPrice: "1.7695",
+    returns: { "1m": "+3.80%", "6m": "+13.81%", "1y": "+19.55%", "3y": "+21.05%", "5y": "+18.67%" }
+  },
+  {
+    name: "PRULink Singapore Growth Fund", code: "KEL7", category: "Core",
+    slug: "prulink-singapore-growth-fund",
+    risk: "Higher Risk", bidPrice: "2.6117", offerPrice: "2.7492",
+    returns: { "1m": "-4.29%", "6m": "+7.05%", "1y": "+18.32%", "3y": "+20.06%", "5y": "+11.70%", "10y": "+9.30%", "inception": "+6.44%" }
+  },
+  {
+    name: "PRULink Asian Equity Fund", code: "CXB2", category: "Satellite",
+    slug: "prulink-asian-equity-fund",
+    risk: "Higher Risk", bidPrice: "3.5967", offerPrice: "3.7860",
+    returns: { "1m": "-1.71%", "6m": "+7.27%", "1y": "+27.79%", "3y": "+22.02%", "5y": "+8.22%", "10y": "+6.20%", "inception": "+4.40%" }
+  },
+  {
+    name: "PRULink Emerging Markets Fund", code: "CXB6", category: "Satellite",
+    slug: "prulink-emerging-markets-fund",
+    risk: "Higher Risk", bidPrice: "2.7368", offerPrice: "2.8809",
+    returns: { "1m": "-1.90%", "6m": "+6.10%", "1y": "+26.70%", "3y": "+18.99%", "5y": "+2.82%", "10y": "+7.64%", "inception": "+5.08%" }
+  },
+  {
+    name: "PRULink Greater China Fund", code: "HSP3", category: "Satellite",
+    slug: "prulink-greater-china-fund",
+    risk: "Higher Risk", bidPrice: "2.5953", offerPrice: "2.7319",
+    returns: { "1m": "+0.91%", "6m": "+4.80%", "1y": "+9.25%", "3y": "+13.57%", "5y": "+0.10%", "10y": "+7.39%", "inception": "+6.14%" }
+  },
+  {
+    name: "PRULink Pan European Fund", code: "CXC4", category: "Satellite",
+    slug: "prulink-pan-european-fund",
+    risk: "Higher Risk", bidPrice: "2.3228", offerPrice: "2.4451",
+    returns: { "1m": "-0.43%", "6m": "+1.63%", "1y": "+2.82%", "3y": "+9.91%", "5y": "+5.19%", "10y": "+7.17%", "inception": "+3.58%" }
+  },
+  {
+    name: "PRULink US Dividend Wealth Fund (Distribution)", code: "AL077", category: "Dividend",
+    slug: "prulink-us-dividend-wealth-fund-distribution",
+    risk: "Higher Risk", bidPrice: "0.9789", offerPrice: "1.0304",
+    returns: { "1m": "-0.58%", "6m": "+0.15%", "1y": "+2.74%", "3y": "+8.47%", "5y": "+7.52%" }
+  },
+  {
+    name: "PRULink StrategicInvest Income Fund (Distribution)", code: "BWVHD", category: "Dividend",
+    slug: "prulink-strategicinvest-income-fund-distribution",
+    risk: "Medium to Higher Risk", bidPrice: "0.9480", offerPrice: "0.9979",
+    returns: { "1m": "-2.14%", "6m": "-0.33%", "1y": "+3.49%", "3y": "+4.02%" }
+  },
+  {
+    name: "PRULink Singapore Cash Fund", code: "CXC6", category: "Cash",
+    slug: "prulink-singapore-cash-fund",
+    risk: "Lower Risk", bidPrice: "1.6146", offerPrice: "1.6146",
+    returns: { "1m": "+0.07%", "6m": "+0.53%", "1y": "+1.08%", "3y": "+2.40%", "5y": "+2.30%", "10y": "+1.64%", "inception": "+1.56%" }
+  }
+];
+
+const PERIODS = ['6m', '1y', '3y', '5y', '10y', 'inception'];
+const PERIOD_LABELS = { '6m': '6M', '1y': '1Y', '3y': '3Y', '5y': '5Y', '10y': '10Y', 'inception': 'Since Inception' };
+const CAT_ORDER = ['Core', 'Satellite', 'Dividend', 'Cash'];
+
+let currentFilter = 'all';
+let currentView = 'cards';
+let currentSort = 'default';
+let searchTerm = '';
+
+function parseReturn(str) {
+  if (!str) return null;
+  return parseFloat(str.replace('%', '').replace('+', ''));
+}
+
+function fundUrl(f) {
+  return `https://www.prudential.com.sg/en/products/wealth/ilp/prulink-funds/${f.slug}/?citicode=${f.code}&tab=performance`;
+}
+
+function renderReturnValue(val) {
+  if (!val) return '<span class="value na">—</span>';
+  const num = parseReturn(val);
+  const cls = num >= 0 ? 'pos' : 'neg';
+  return `<span class="value ${cls}">${val}</span>`;
+}
+
+function getFilteredFunds() {
+  let funds = [...FUNDS];
+  if (currentFilter !== 'all') {
+    funds = funds.filter(f => f.category === currentFilter);
+  }
+  if (searchTerm) {
+    const q = searchTerm.toLowerCase();
+    funds = funds.filter(f => f.name.toLowerCase().includes(q));
+  }
+  if (currentSort !== 'default') {
+    const [key, dir] = currentSort.split('-');
+    funds.sort((a, b) => {
+      if (key === 'name') return dir === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+      const aVal = parseReturn(a.returns[key]);
+      const bVal = parseReturn(b.returns[key]);
+      if (aVal === null && bVal === null) return 0;
+      if (aVal === null) return 1;
+      if (bVal === null) return 1;
+      return dir === 'desc' ? bVal - aVal : aVal - bVal;
+    });
+  }
+  return funds;
+}
+
+function renderCards() {
+  const funds = getFilteredFunds();
+  const container = document.getElementById('cardView');
+
+  if (currentSort !== 'default' || currentFilter !== 'all') {
+    // Flat list when sorting or filtering
+    container.innerHTML = funds.map(f => renderCard(f)).join('');
+  } else {
+    // Grouped by category
+    let html = '';
+    for (const cat of CAT_ORDER) {
+      const catFunds = funds.filter(f => f.category === cat);
+      if (catFunds.length === 0) continue;
+      html += `<div class="category-label">${cat}</div>`;
+      html += `<div class="fund-grid">${catFunds.map(f => renderCard(f)).join('')}</div>`;
+    }
+    container.innerHTML = html;
+  }
+}
+
+function renderCard(f) {
+  const riskClass = f.risk.includes('Lower') ? 'lower' : (f.risk.includes('Higher') ? 'higher' : '');
+  return `
+    <div class="fund-card">
+      <div class="fund-info">
+        <div class="fund-name">${f.name}</div>
+        <div class="fund-meta">
+          <span class="risk-badge ${riskClass}">${f.risk}</span>
+          <a href="${fundUrl(f)}" target="_blank" rel="noopener" class="fund-link">View on Prudential →</a>
+        </div>
+      </div>
+      <div class="returns-row">
+        ${PERIODS.map(p => {
+          const val = f.returns[p];
+          return `<div class="return-cell">
+            <div class="period">${PERIOD_LABELS[p]}</div>
+            ${renderReturnValue(val)}
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="prices-col">
+        <div><span class="label">Bid</span> <span>$${f.bidPrice}</span></div>
+        <div><span class="label">Offer</span> <span>$${f.offerPrice}</span></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderTable() {
+  const funds = getFilteredFunds();
+  const container = document.getElementById('tableView');
+
+  let html = `<table>
+    <thead><tr>
+      <th>Fund</th>
+      <th class="sortable" onclick="sortByCol('6m')">6M <span class="sort-arrow">↕</span></th>
+      <th class="sortable" onclick="sortByCol('1y')">1Y <span class="sort-arrow">↕</span></th>
+      <th class="sortable" onclick="sortByCol('3y')">3Y <span class="sort-arrow">↕</span></th>
+      <th class="sortable" onclick="sortByCol('5y')">5Y <span class="sort-arrow">↕</span></th>
+      <th class="sortable" onclick="sortByCol('10y')">10Y <span class="sort-arrow">↕</span></th>
+      <th>Bid</th>
+    </tr></thead><tbody>`;
+
+  if (currentSort === 'default' && currentFilter === 'all' && !searchTerm) {
+    for (const cat of CAT_ORDER) {
+      const catFunds = funds.filter(f => f.category === cat);
+      if (catFunds.length === 0) continue;
+      html += `<tr class="cat-row"><td colspan="8">${cat}</td></tr>`;
+      for (const f of catFunds) {
+        html += renderTableRow(f);
+      }
+    }
+  } else {
+    for (const f of funds) {
+      html += renderTableRow(f);
+    }
+  }
+
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function renderTableRow(f) {
+  return `<tr>
+    <td><a href="${fundUrl(f)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${f.name}</a></td>
+    ${['6m','1y','3y','5y','10y'].map(p => {
+      const val = f.returns[p];
+      if (!val) return '<td class="na-cell">—</td>';
+      const num = parseReturn(val);
+      return `<td class="${num >= 0 ? 'pos' : 'neg'}">${val}</td>`;
+    }).join('')}
+    <td>$${f.bidPrice}</td>
+  </tr>`;
+}
+
+function sortByCol(key) {
+  const sel = document.getElementById('sortSelect');
+  if (currentSort === key + '-desc') {
+    currentSort = key + '-asc';
+    sel.value = currentSort;
+  } else {
+    currentSort = key + '-desc';
+    sel.value = currentSort in Object.fromEntries([...sel.options].map(o => [o.value, 1])) ? currentSort : 'default';
+  }
+  render();
+}
+
+function setView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.view-toggle button:${view === 'cards' ? 'first-child' : 'last-child'}`).classList.add('active');
+  document.getElementById('cardView').style.display = view === 'cards' ? 'block' : 'none';
+  document.getElementById('tableView').style.display = view === 'table' ? 'block' : 'none';
+  render();
+}
+
+function filterCat(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  render();
+}
+
+function filterFunds() {
+  searchTerm = document.getElementById('searchInput').value;
+  render();
+}
+
+function sortFunds() {
+  currentSort = document.getElementById('sortSelect').value;
+  render();
+}
+
+function render() {
+  renderCards();
+  renderTable();
+}
+
+// Initial render
+render();
+</script>
