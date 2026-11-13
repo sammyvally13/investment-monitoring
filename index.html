@@ -573,6 +573,51 @@ body::before {
 .search-input:focus { border-color: var(--gold); }
 .search-input::placeholder { color: var(--text-muted); }
 
+.top-tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 12px;
+}
+
+.top-tab {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 7px 22px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  letter-spacing: 0.02em;
+}
+
+.top-tab:first-child { border-radius: 4px 0 0 4px; }
+.top-tab:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
+.top-tab:hover { border-color: var(--gold); color: var(--navy); }
+
+.top-tab.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .top-tab.active {
+    background: var(--gold); border-color: var(--gold); color: #111;
+  }
+}
+:root[data-theme="dark"] .top-tab.active {
+  background: var(--gold); border-color: var(--gold); color: #111;
+}
+
+.cpf-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-style: italic;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
@@ -582,19 +627,26 @@ body::before {
   <div class="header-inner">
     <h1>PRULink Fund Performance</h1>
     <div class="header-meta">
-      <span class="date-badge">As of 29 Oct 2026</span>
+      <span class="date-badge">As of 11 Nov 2026</span>
       <span>Bid-to-bid returns · Annualised where &gt;1 year</span>
     </div>
+    <div class="top-tabs">
+      <button class="top-tab active" onclick="switchTab('portfolio')">Portfolio</button>
+      <button class="top-tab" onclick="switchTab('cpf')">CPF</button>
+    </div>
+    <div id="cpfNote" class="cpf-note" style="display:none">Showing CPF Investment Scheme eligible funds only</div>
     <div class="controls">
       <div class="view-toggle">
         <button onclick="setView('cards')">Cards</button>
         <button class="active" onclick="setView('table')">Table</button>
       </div>
-      <button class="filter-btn active" data-cat="all" onclick="filterCat('all')">All</button>
-      <button class="filter-btn" data-cat="Core" onclick="filterCat('Core')">Core</button>
-      <button class="filter-btn" data-cat="Satellite" onclick="filterCat('Satellite')">Satellite</button>
-      <button class="filter-btn" data-cat="Dividend" onclick="filterCat('Dividend')">Dividend</button>
-      <button class="filter-btn" data-cat="Cash" onclick="filterCat('Cash')">Cash</button>
+      <div id="filterButtons">
+        <button class="filter-btn active" data-cat="all" onclick="filterCat('all')">All</button>
+        <button class="filter-btn" data-cat="Core" onclick="filterCat('Core')">Core</button>
+        <button class="filter-btn" data-cat="Satellite" onclick="filterCat('Satellite')">Satellite</button>
+        <button class="filter-btn" data-cat="Dividend" onclick="filterCat('Dividend')">Dividend</button>
+        <button class="filter-btn" data-cat="Cash" onclick="filterCat('Cash')">Cash</button>
+      </div>
       <input type="text" class="search-input" placeholder="Search funds..." id="searchInput" oninput="filterFunds()">
       <select class="sort-select" id="sortSelect" onchange="sortFunds()">
         <option value="default">Sort: Default</option>
@@ -623,125 +675,266 @@ const FUNDS = [
   {
     name: "PRULink America Fund", code: "CXB1", category: "Core",
     slug: "prulink-america-fund",
-    risk: "Higher Risk", bidPrice: "3.0436", offerPrice: "3.2038",
+    risk: "Higher Risk", bidPrice: "3.0912", offerPrice: "3.2539",
     objective: "Invest principally in US equity securities.",
     holdings: ["Alphabet Inc", "Wells Fargo & Co", "FedEx Corp", "Elevance Health Inc", "McKesson Corp"],
-    returns: { "1y": "+6.38%", "3y": "+9.23%", "5y": "+5.40%", "10y": "+6.58%", "inception": "+5.59%" }
+    returns: { "1y": "+7.13%", "3y": "+8.83%", "5y": "+5.08%", "10y": "+6.38%", "inception": "+5.65%" }
   },
   {
     name: "PRULink Global Equity Growth (Accumulation)", code: "AUM2H", category: "Core",
     slug: "prulink-global-equity-growth-accumulation",
-    risk: "Higher Risk", bidPrice: "1.2424", offerPrice: "1.3077",
+    risk: "Higher Risk", bidPrice: "1.1747", offerPrice: "1.2366",
     objective: "To provide superior capital growth by investing primarily in shares of companies with strong growth potential.",
     holdings: ["Nvidia Corporation", "Amazon.com Inc", "Intuitive Surgical Inc", "Eli Lilly & Company", "Boston Scientific Corporation"],
-    returns: { "1y": "-4.28%", "3y": "+11.61%" }
+    returns: { "1y": "-9.43%", "3y": "+8.94%" }
   },
   {
     name: "PRULink Global Technology Fund", code: "CXC2", category: "Core",
     slug: "prulink-global-technology-fund",
-    risk: "Higher Risk", bidPrice: "5.4466", offerPrice: "5.7332",
+    risk: "Higher Risk", bidPrice: "5.2020", offerPrice: "5.4757",
     objective: "Maximise long-term total returns through investment in equities and equity-related securities of companies around the world with innovative products, processes or services.",
     holdings: ["Microsoft Corporation", "Nvidia Corporation", "Alphabet Inc Class A", "Meta Platforms Inc", "Amazon.com Inc"],
-    returns: { "1y": "+13.25%", "3y": "+30.17%", "5y": "+13.27%", "10y": "+18.27%", "inception": "+7.09%" }
+    returns: { "1y": "+10.95%", "3y": "+24.88%", "5y": "+11.78%", "10y": "+18.03%", "inception": "+6.89%" }
   },
   {
     name: "PRULink India Opportunity Equity Fund (Accumulation)", code: "CAFAL", category: "Core",
     slug: "prulink-india-opportunity-equity-fund-accumulation",
-    risk: "Higher Risk", bidPrice: "0.8977", offerPrice: "0.9449",
+    risk: "Higher Risk", bidPrice: "0.9978", offerPrice: "1.0503",
     objective: "To achieve capital appreciation by investing in equity securities of companies located in India.",
     holdings: ["HDFC Bank Ltd", "Mahindra & Mahindra Ltd", "ICICI Bank Ltd", "Eternal Ltd", "Tata Motors Passenger Vehicles"],
-    returns: { "1y": "-5.51%" }
+    returns: { "1y": "+5.03%" }
   },
   {
     name: "PRULink Islamic Global Equity Index Fund (Accumulation)", code: "ASHIL", category: "Core",
     slug: "prulink-islamic-global-equity-index-fund-accumulation",
-    risk: "Higher Risk", bidPrice: "1.6448", offerPrice: "1.7313",
+    risk: "Higher Risk", bidPrice: "1.6118", offerPrice: "1.6967",
     objective: "Track the performance of a world index through investment in a diversified portfolio of securities which meets Islamic investment principles.",
     holdings: ["Microsoft Corp", "Apple Inc", "NVIDIA Corp", "Alphabet Inc", "Amazon.com Inc"],
-    returns: { "1y": "+12.51%", "3y": "+22.03%", "5y": "+17.66%" }
+    returns: { "1y": "+10.28%", "3y": "+18.86%", "5y": "+16.76%" }
   },
   {
     name: "PRULink Singapore Growth Fund", code: "KEL7", category: "Core",
     slug: "prulink-singapore-growth-fund",
-    risk: "Higher Risk", bidPrice: "2.5841", offerPrice: "2.7201",
+    risk: "Higher Risk", bidPrice: "2.5321", offerPrice: "2.6653",
     objective: "Aims to provide unitholders with medium to long-term capital growth from a portfolio of Singapore Equities through investing all of its assets in the abrdn Singapore Equity Fund.",
     holdings: ["DBS Group Holdings Ltd", "Oversea-Chinese Banking Corp Ltd", "United Overseas Bank Ltd", "Singapore Telecommunications Ltd", "Sembcorp Industries Ltd"],
-    returns: { "1y": "+15.13%", "3y": "+21.33%", "5y": "+11.40%", "10y": "+9.17%", "inception": "+6.35%" }
+    returns: { "1y": "+10.68%", "3y": "+19.74%", "5y": "+10.75%", "10y": "+8.93%", "inception": "+6.20%" }
   },
   {
     name: "PRULink Asian Equity Fund", code: "CXB2", category: "Core",
     slug: "prulink-asian-equity-fund",
-    risk: "Higher Risk", bidPrice: "3.4701", offerPrice: "3.6527",
+    risk: "Higher Risk", bidPrice: "3.4577", offerPrice: "3.6397",
     objective: "To maximise long-term total return by investing primarily in equity and equity-related securities of companies in the Asia Pacific ex-Japan Region.",
     holdings: ["Samsung Electronics Co Ltd", "Taiwan Semiconductor Manufacturing", "SK hynix Inc.", "Tencent Holdings Ltd", "BHP Group Ltd"],
-    returns: { "1y": "+16.83%", "3y": "+21.94%", "5y": "+7.49%", "10y": "+5.82%", "inception": "+4.27%" }
+    returns: { "1y": "+15.62%", "3y": "+21.17%", "5y": "+7.27%", "10y": "+5.95%", "inception": "+4.25%" }
   },
   {
     name: "PRULink Emerging Markets Fund", code: "CXB6", category: "Core",
     slug: "prulink-emerging-markets-fund",
-    risk: "Higher Risk", bidPrice: "2.5858", offerPrice: "2.7219",
+    risk: "Higher Risk", bidPrice: "2.5710", offerPrice: "2.7063",
     objective: "To provide long-term capital growth by investing primarily in emerging markets companies.",
     holdings: ["SK Hynix", "TSMC", "Samsung Electronics", "Tencent", "Delta Electronics"],
-    returns: { "1y": "+13.73%", "3y": "+17.84%", "5y": "+1.85%", "10y": "+6.98%", "inception": "+4.79%" }
+    returns: { "1y": "+12.99%", "3y": "+16.75%", "5y": "+1.37%", "10y": "+7.56%", "inception": "+4.75%" }
   },
   {
     name: "PRULink Greater China Fund", code: "HSP3", category: "Satellite",
     slug: "prulink-greater-china-fund",
-    risk: "Higher Risk", bidPrice: "2.3982", offerPrice: "2.5244",
+    risk: "Higher Risk", bidPrice: "2.4348", offerPrice: "2.5629",
     objective: "Provide capital growth primarily through investment in equity securities of the People's Republic of China, Hong Kong SAR and Taiwan companies.",
     holdings: ["Taiwan Semiconductor", "Tencent Holdings Ltd", "Alibaba Group Holding Ltd", "AIA Group Ltd", "MediaTek Inc"],
-    returns: { "1y": "-0.80%", "3y": "+11.06%", "5y": "-1.51%", "10y": "+6.55%", "inception": "+5.63%" }
+    returns: { "1y": "+0.90%", "3y": "+11.63%", "5y": "-1.38%", "10y": "+6.90%", "inception": "+5.71%" }
   },
   {
     name: "PRULink Pan European Fund", code: "CXC4", category: "Satellite",
     slug: "prulink-pan-european-fund",
-    risk: "Higher Risk", bidPrice: "2.3669", offerPrice: "2.4915",
+    risk: "Higher Risk", bidPrice: "2.4232", offerPrice: "2.5507",
     objective: "Maximise long-term total return by investing in equity and equity-related securities of companies incorporated or operating principally in Europe (including UK).",
     holdings: ["Novo Nordisk A/S", "Schneider Electric SE", "AIB Group Plc", "Scout24 SE", "SAP SE"],
-    returns: { "1y": "+4.17%", "3y": "+12.76%", "5y": "+5.36%", "10y": "+7.59%", "inception": "+3.65%" }
+    returns: { "1y": "+7.07%", "3y": "+12.01%", "5y": "+5.43%", "10y": "+7.90%", "inception": "+3.74%" }
   },
   {
     name: "PRULink China India Fund", code: "CXB4", category: "Satellite",
     slug: "prulink-china-india-fund",
-    risk: "Higher Risk", bidPrice: "3.9104", offerPrice: "4.1162",
+    risk: "Higher Risk", bidPrice: "4.2222", offerPrice: "4.4445",
     objective: "To maximise long-term total return by investing primarily in equity and equity-related instruments of corporations with significant business in the People's Republic of China and India.",
     holdings: ["Tencent Holdings Ltd", "Alibaba Group Holding Ltd", "ICICI Bank Ltd", "Reliance Industries Ltd", "China Construction Bank Corp"],
-    returns: { "1y": "-18.36%", "3y": "+3.94%", "5y": "-2.36%", "10y": "+4.18%", "inception": "+6.57%" }
+    returns: { "1y": "-11.71%", "3y": "+6.57%", "5y": "-1.15%", "10y": "+5.25%", "inception": "+6.93%" }
   },
   {
     name: "PRULink US Dividend Wealth Fund (Distribution)", code: "AL077", category: "Dividend",
     slug: "prulink-us-dividend-wealth-fund-distribution",
-    risk: "Higher Risk", bidPrice: "0.9718", offerPrice: "1.0229",
+    risk: "Higher Risk", bidPrice: "0.9541", offerPrice: "1.0043",
     objective: "Provide long term capital growth and income by investing in corporate debt securities and equities of US and/or Canadian equity and bond markets.",
     holdings: ["Microsoft Corp", "Apple Inc", "Amazon.com Inc", "Nvidia Corp", "Wells Fargo & Company"],
-    returns: { "1y": "+1.88%", "3y": "+9.88%", "5y": "+7.54%" }
+    returns: { "1y": "+0.08%", "3y": "+7.94%", "5y": "+6.99%" }
   },
   {
     name: "PRULink StrategicInvest Income Fund (Distribution)", code: "BWVHD", category: "Dividend",
     slug: "prulink-strategicinvest-income-fund-distribution",
-    risk: "Medium to Higher Risk", bidPrice: "0.9477", offerPrice: "0.9976",
+    risk: "Medium to High Risk", bidPrice: "0.9365", offerPrice: "0.9858",
     objective: "Aims to provide long term capital growth and income by investing in a diversified portfolio of Underlying Funds.",
     holdings: [],
-    returns: { "1y": "+2.63%", "3y": "+3.85%" }
+    returns: { "1y": "+0.88%", "3y": "+2.74%" }
   },
   {
     name: "PRULink Singapore Cash Fund", code: "CXC6", category: "Cash",
     slug: "prulink-singapore-cash-fund",
-    risk: "Lower Risk", bidPrice: "1.6158", offerPrice: "1.6158",
+    risk: "Lower Risk", bidPrice: "1.6166", offerPrice: "1.6166",
     objective: "Preserve principal value and maintain a high degree of liquidity while seeking to provide returns higher than those offered by Singapore dollar short-term bank deposits.",
     holdings: ["MAS Bill Maspsp 07/19/24", "MAS Bill Maspsp 07/05/24", "MAS Bill Maspsp 08/30/24", "MAS Bill Maspsp 08/16/24", "MAS Bill Maspsp 08/02/24"],
-    returns: { "1y": "+1.10%", "3y": "+2.38%", "5y": "+2.32%", "10y": "+1.64%", "inception": "+1.56%" }
+    returns: { "1y": "+1.11%", "3y": "+2.34%", "5y": "+2.33%", "10y": "+1.64%", "inception": "+1.56%" }
+  }
+];
+
+const CPF_FUNDS = [
+  {
+    name: "PRULink Global Bond Fund", code: "CXB8", category: "Bond",
+    slug: "prulink-global-bond-fund",
+    risk: "Medium Risk", bidPrice: "1.4712", offerPrice: "1.5486",
+    objective: "To maximise total return through investing in a diversified portfolio of global fixed-income securities.",
+    holdings: [],
+    returns: { "1y": "-4.16%", "3y": "+1.60%", "5y": "-3.01%", "10y": "-0.65%", "inception": "+1.59%" }
+  },
+  {
+    name: "PRULink Singapore Dynamic Bond Fund (Accumulation)", code: "NFK2", category: "Bond",
+    slug: "prulink-singapore-dynamic-bond-fund-accumulation",
+    risk: "Medium Risk", bidPrice: "1.5569", offerPrice: "1.6388",
+    objective: "To maximise total return through investing in a diversified portfolio of Singapore and Asian fixed-income securities.",
+    holdings: [],
+    returns: { "1y": "-1.74%", "3y": "+5.32%", "5y": "+1.93%", "10y": "+2.67%", "inception": "+3.22%" }
+  },
+  {
+    name: "PRULink Adapt 2035 Fund", code: "CXB0", category: "Balanced",
+    slug: "prulink-adapt-2035-fund",
+    risk: "Medium to High Risk", bidPrice: "2.2504", offerPrice: "2.3688",
+    objective: "To provide capital growth by investing in a diversified portfolio of equities and bonds, with asset allocation adjusted over time as the target date approaches.",
+    holdings: [],
+    returns: { "1y": "+4.00%", "3y": "+10.35%", "5y": "+3.26%", "10y": "+5.69%", "inception": "+4.10%" }
+  },
+  {
+    name: "PRULink Asian Income and Growth Fund (Accumulation)", code: "JNJM", category: "Balanced",
+    slug: "prulink-asian-income-and-growth-fund-accumulation",
+    risk: "Medium to High Risk", bidPrice: "1.7382", offerPrice: "1.8297",
+    objective: "To provide income and capital growth by investing in a diversified portfolio of Asian equities and fixed-income securities.",
+    holdings: [],
+    returns: { "1y": "+4.77%", "3y": "+9.56%", "5y": "+1.43%", "10y": "+4.60%", "inception": "+4.69%" }
+  },
+  {
+    name: "PRULink Global Managed Fund", code: "CXC0", category: "Balanced",
+    slug: "prulink-global-managed-fund",
+    risk: "Medium to High Risk", bidPrice: "2.7510", offerPrice: "2.8957",
+    objective: "To maximise long-term total return by investing in a globally diversified portfolio of equities, bonds and other securities.",
+    holdings: [],
+    returns: { "1y": "+4.64%", "3y": "+11.15%", "5y": "+4.05%", "10y": "+6.50%", "inception": "+3.90%" }
+  },
+  {
+    name: "PRULink Singapore Asean Managed Fund", code: "0ZR7", category: "Balanced",
+    slug: "prulink-singapore-asean-managed-fund",
+    risk: "Medium to High Risk", bidPrice: "1.3901", offerPrice: "1.4632",
+    objective: "To provide long-term capital growth by investing in a diversified portfolio of Singapore and ASEAN equities and fixed-income securities.",
+    holdings: [],
+    returns: { "1y": "-0.50%", "3y": "+5.54%", "5y": "+2.15%", "10y": "+2.85%", "inception": "+2.63%" }
+  },
+  {
+    name: "PRULink America Fund", code: "CXB1", category: "Equity",
+    slug: "prulink-america-fund",
+    risk: "Higher Risk", bidPrice: "3.0912", offerPrice: "3.2539",
+    objective: "Invest principally in US equity securities.",
+    holdings: ["Alphabet Inc", "Wells Fargo & Co", "FedEx Corp", "Elevance Health Inc", "McKesson Corp"],
+    returns: { "1y": "+7.13%", "3y": "+8.83%", "5y": "+5.08%", "10y": "+6.38%", "inception": "+5.65%" }
+  },
+  {
+    name: "PRULink Emerging Markets Fund", code: "CXB6", category: "Equity",
+    slug: "prulink-emerging-markets-fund",
+    risk: "Higher Risk", bidPrice: "2.5710", offerPrice: "2.7063",
+    objective: "To provide long-term capital growth by investing primarily in emerging markets companies.",
+    holdings: ["SK Hynix", "TSMC", "Samsung Electronics", "Tencent", "Delta Electronics"],
+    returns: { "1y": "+12.99%", "3y": "+16.75%", "5y": "+1.37%", "10y": "+7.56%", "inception": "+4.75%" }
+  },
+  {
+    name: "PRULink Global Equity Fund", code: "CXB9", category: "Equity",
+    slug: "prulink-global-equity-fund",
+    risk: "Higher Risk", bidPrice: "2.7244", offerPrice: "2.8677",
+    objective: "To maximise long-term total return through investment in equity securities of companies across global markets.",
+    holdings: [],
+    returns: { "1y": "+15.10%", "3y": "+16.61%", "5y": "+8.89%", "10y": "+9.23%", "inception": "+3.87%" }
+  },
+  {
+    name: "PRULink Greater China Fund", code: "HSP3", category: "Equity",
+    slug: "prulink-greater-china-fund",
+    risk: "Higher Risk", bidPrice: "2.4348", offerPrice: "2.5629",
+    objective: "Provide capital growth primarily through investment in equity securities of the People's Republic of China, Hong Kong SAR and Taiwan companies.",
+    holdings: ["Taiwan Semiconductor", "Tencent Holdings Ltd", "Alibaba Group Holding Ltd", "AIA Group Ltd", "MediaTek Inc"],
+    returns: { "1y": "+0.90%", "3y": "+11.63%", "5y": "-1.38%", "10y": "+6.90%", "inception": "+5.71%" }
+  },
+  {
+    name: "PRULink India Opportunity Equity Fund (Accumulation)", code: "CAFAL", category: "Equity",
+    slug: "prulink-india-opportunity-equity-fund-accumulation",
+    risk: "Higher Risk", bidPrice: "0.9978", offerPrice: "1.0503",
+    objective: "To achieve capital appreciation by investing in equity securities of companies located in India.",
+    holdings: ["HDFC Bank Ltd", "Mahindra & Mahindra Ltd", "ICICI Bank Ltd", "Eternal Ltd", "Tata Motors Passenger Vehicles"],
+    returns: { "1y": "+5.03%" }
+  },
+  {
+    name: "PRULink Pan European Fund", code: "CXC4", category: "Equity",
+    slug: "prulink-pan-european-fund",
+    risk: "Higher Risk", bidPrice: "2.4232", offerPrice: "2.5507",
+    objective: "Maximise long-term total return by investing in equity and equity-related securities of companies incorporated or operating principally in Europe (including UK).",
+    holdings: ["Novo Nordisk A/S", "Schneider Electric SE", "AIB Group Plc", "Scout24 SE", "SAP SE"],
+    returns: { "1y": "+7.07%", "3y": "+12.01%", "5y": "+5.43%", "10y": "+7.90%", "inception": "+3.74%" }
+  },
+  {
+    name: "PRULink Singapore Growth Fund", code: "KEL7", category: "Equity",
+    slug: "prulink-singapore-growth-fund",
+    risk: "Higher Risk", bidPrice: "2.5321", offerPrice: "2.6653",
+    objective: "Aims to provide unitholders with medium to long-term capital growth from a portfolio of Singapore Equities through investing all of its assets in the abrdn Singapore Equity Fund.",
+    holdings: ["DBS Group Holdings Ltd", "Oversea-Chinese Banking Corp Ltd", "United Overseas Bank Ltd", "Singapore Telecommunications Ltd", "Sembcorp Industries Ltd"],
+    returns: { "1y": "+10.68%", "3y": "+19.74%", "5y": "+10.75%", "10y": "+8.93%", "inception": "+6.20%" }
   }
 ];
 
 const PERIODS = ['1y', '3y', '5y', '10y', 'inception'];
 const PERIOD_LABELS = { '1y': '1Y', '3y': '3Y', '5y': '5Y', '10y': '10Y', 'inception': 'Since Inception' };
 const CAT_ORDER = ['Core', 'Satellite', 'Dividend', 'Cash'];
+const CPF_CAT_ORDER = ['Bond', 'Balanced', 'Equity'];
 
+let currentTab = 'portfolio';
 let currentFilter = 'all';
 let currentView = 'table';
 let currentSort = 'default';
 let searchTerm = '';
+
+function getActiveFunds() {
+  return currentTab === 'cpf' ? CPF_FUNDS : FUNDS;
+}
+
+function getActiveCatOrder() {
+  return currentTab === 'cpf' ? CPF_CAT_ORDER : CAT_ORDER;
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  currentFilter = 'all';
+  currentSort = 'default';
+  searchTerm = '';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('sortSelect').value = 'default';
+  document.querySelectorAll('.top-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.top-tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+  document.getElementById('cpfNote').style.display = tab === 'cpf' ? 'block' : 'none';
+  updateFilterButtons();
+  render();
+}
+
+function updateFilterButtons() {
+  const cats = getActiveCatOrder();
+  const container = document.getElementById('filterButtons');
+  let html = `<button class="filter-btn${currentFilter === 'all' ? ' active' : ''}" data-cat="all" onclick="filterCat('all')">All</button>`;
+  for (const cat of cats) {
+    html += `<button class="filter-btn${currentFilter === cat ? ' active' : ''}" data-cat="${cat}" onclick="filterCat('${cat}')">${cat}</button>`;
+  }
+  container.innerHTML = html;
+}
 
 function parseReturn(str) {
   if (!str) return null;
@@ -760,7 +953,7 @@ function renderReturnValue(val) {
 }
 
 function getFilteredFunds() {
-  let funds = [...FUNDS];
+  let funds = [...getActiveFunds()];
   if (currentFilter !== 'all') {
     funds = funds.filter(f => f.category === currentFilter);
   }
@@ -791,13 +984,14 @@ function renderHoldingsList(holdings) {
 
 function renderCards() {
   const funds = getFilteredFunds();
+  const catOrder = getActiveCatOrder();
   const container = document.getElementById('cardView');
 
   if (currentSort !== 'default' || currentFilter !== 'all') {
     container.innerHTML = funds.map(f => renderCard(f)).join('');
   } else {
     let html = '';
-    for (const cat of CAT_ORDER) {
+    for (const cat of catOrder) {
       const catFunds = funds.filter(f => f.category === cat);
       if (catFunds.length === 0) continue;
       html += `<div class="category-label">${cat}</div>`;
@@ -809,7 +1003,7 @@ function renderCards() {
 
 function renderCard(f) {
   const riskClass = f.risk.includes('Lower') ? 'lower' : (f.risk.includes('Higher') ? 'higher' : '');
-  const id = 'card-' + f.code;
+  const id = 'card-' + f.code + '-' + currentTab;
   return `
     <div class="fund-card">
       <div class="fund-info">
@@ -849,6 +1043,7 @@ function toggleCardDetail(id, btn) {
 
 function renderTable() {
   const funds = getFilteredFunds();
+  const catOrder = getActiveCatOrder();
   const container = document.getElementById('tableView');
 
   let html = `<table>
@@ -862,7 +1057,7 @@ function renderTable() {
     </tr></thead><tbody>`;
 
   if (currentSort === 'default' && currentFilter === 'all' && !searchTerm) {
-    for (const cat of CAT_ORDER) {
+    for (const cat of catOrder) {
       const catFunds = funds.filter(f => f.category === cat);
       if (catFunds.length === 0) continue;
       html += `<tr class="cat-row"><td colspan="6">${cat}</td></tr>`;
@@ -881,7 +1076,7 @@ function renderTable() {
 }
 
 function renderTableRow(f) {
-  const id = 'tbl-' + f.code;
+  const id = 'tbl-' + f.code + '-' + currentTab;
   return `<tr>
     <td>
       <a href="${fundUrl(f)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${f.name}</a>
