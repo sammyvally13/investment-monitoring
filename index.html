@@ -482,6 +482,21 @@ body::before {
   margin-right: 4px;
 }
 
+.table-view .risk-badge {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.table-view .risk-badge.higher { color: var(--negative); }
+.table-view .risk-badge.lower { color: var(--positive); }
+
 .table-view .expand-btn {
   font-family: var(--font-body);
   background: none;
@@ -1080,6 +1095,7 @@ function renderTableRow(f) {
   return `<tr>
     <td>
       <a href="${fundUrl(f)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${f.name}</a>
+      <span class="risk-badge ${f.risk.includes('Lower') ? 'lower' : (f.risk.includes('Higher') ? 'higher' : '')}" style="font-size:0.6rem;margin-left:6px;vertical-align:middle">${f.risk}</span>
       <button class="expand-btn" onclick="toggleTableDetail('${id}', this)"><span class="chevron">▶</span> Info</button>
     </td>
     ${['1y','3y','5y','10y'].map(p => {
