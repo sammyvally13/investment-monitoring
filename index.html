@@ -257,6 +257,7 @@ body::before {
 .fund-meta .risk-badge.higher { color: var(--negative); }
 .fund-meta .risk-badge.lower { color: var(--positive); }
 .fund-meta .risk-badge.low-medium { color: #b8860b; }
+.fund-meta .risk-badge.medium-high { color: #d4760a; }
 
 .returns-row {
   display: grid;
@@ -498,6 +499,7 @@ body::before {
 .table-view .risk-badge.higher { color: var(--negative); }
 .table-view .risk-badge.lower { color: var(--positive); }
 .table-view .risk-badge.low-medium { color: #b8860b; }
+.table-view .risk-badge.medium-high { color: #d4760a; }
 
 .table-view .expand-btn {
   font-family: var(--font-body);
@@ -1019,7 +1021,7 @@ function renderCards() {
 }
 
 function renderCard(f) {
-  const riskClass = f.risk.includes('Lower') ? 'lower' : f.risk.includes('Higher') ? 'higher' : f.risk === 'Low to Medium Risk' ? 'low-medium' : '';
+  const riskClass = f.risk.includes('Lower') ? 'lower' : f.risk.includes('Higher') ? 'higher' : f.risk === 'Low to Medium Risk' ? 'low-medium' : f.risk === 'Medium to High Risk' ? 'medium-high' : '';
   const id = 'card-' + f.code + '-' + currentTab;
   return `
     <div class="fund-card">
@@ -1097,7 +1099,7 @@ function renderTableRow(f) {
   return `<tr>
     <td>
       <a href="${fundUrl(f)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${f.name}</a>
-      <span class="risk-badge ${f.risk.includes('Lower') ? 'lower' : f.risk.includes('Higher') ? 'higher' : f.risk === 'Low to Medium Risk' ? 'low-medium' : ''}" style="font-size:0.6rem;margin-left:6px;vertical-align:middle">${f.risk}</span>
+      <span class="risk-badge ${f.risk.includes('Lower') ? 'lower' : f.risk.includes('Higher') ? 'higher' : f.risk === 'Low to Medium Risk' ? 'low-medium' : f.risk === 'Medium to High Risk' ? 'medium-high' : ''}" style="font-size:0.6rem;margin-left:6px;vertical-align:middle">${f.risk}</span>
       <button class="expand-btn" onclick="toggleTableDetail('${id}', this)"><span class="chevron">▶</span> Info</button>
     </td>
     ${['1y','3y','5y','10y'].map(p => {
