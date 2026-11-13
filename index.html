@@ -256,6 +256,7 @@ body::before {
 
 .fund-meta .risk-badge.higher { color: var(--negative); }
 .fund-meta .risk-badge.lower { color: var(--positive); }
+.fund-meta .risk-badge.low-medium { color: #b8860b; }
 
 .returns-row {
   display: grid;
@@ -496,6 +497,7 @@ body::before {
 }
 .table-view .risk-badge.higher { color: var(--negative); }
 .table-view .risk-badge.lower { color: var(--positive); }
+.table-view .risk-badge.low-medium { color: #b8860b; }
 
 .table-view .expand-btn {
   font-family: var(--font-body);
@@ -642,7 +644,7 @@ body::before {
   <div class="header-inner">
     <h1>PRULink Fund Performance</h1>
     <div class="header-meta">
-      <span class="date-badge">As of 11 Nov 2026</span>
+      <span class="date-badge">As of 13 Nov 2026</span>
       <span>Bid-to-bid returns · Annualised where &gt;1 year</span>
     </div>
     <div class="top-tabs">
@@ -805,17 +807,17 @@ const CPF_FUNDS = [
   {
     name: "PRULink Global Bond Fund", code: "CXB8", category: "Bond",
     slug: "prulink-global-bond-fund",
-    risk: "Medium Risk", bidPrice: "1.4712", offerPrice: "1.5486",
+    risk: "Low to Medium Risk", bidPrice: "1.4712", offerPrice: "1.5486",
     objective: "To maximise total return through investing in a diversified portfolio of global fixed-income securities.",
-    holdings: [],
+    holdings: ["Government Of Germany 4.75%", "Mapletree Treasury Services 3.95%", "Government Of France 1.5%", "Government Of Spain 3.45%", "Meiji Yasuda Life Insurance 6.1%"],
     returns: { "1y": "-4.16%", "3y": "+1.60%", "5y": "-3.01%", "10y": "-0.65%", "inception": "+1.59%" }
   },
   {
     name: "PRULink Singapore Dynamic Bond Fund (Accumulation)", code: "NFK2", category: "Bond",
     slug: "prulink-singapore-dynamic-bond-fund-accumulation",
-    risk: "Medium Risk", bidPrice: "1.5569", offerPrice: "1.6388",
+    risk: "Low to Medium Risk", bidPrice: "1.5569", offerPrice: "1.6388",
     objective: "To maximise total return through investing in a diversified portfolio of Singapore and Asian fixed-income securities.",
-    holdings: [],
+    holdings: ["Singapore (Republic Of) 2.375%", "Singapore (Republic Of) 2.25%", "Singapore (Republic Of) 2.75% 2046", "Singapore (Republic Of) 2.75% 2042", "Singapore (Republic Of) 3% 2072"],
     returns: { "1y": "-1.74%", "3y": "+5.32%", "5y": "+1.93%", "10y": "+2.67%", "inception": "+3.22%" }
   },
   {
@@ -823,7 +825,7 @@ const CPF_FUNDS = [
     slug: "prulink-adapt-2035-fund",
     risk: "Medium to High Risk", bidPrice: "2.2504", offerPrice: "2.3688",
     objective: "To provide capital growth by investing in a diversified portfolio of equities and bonds, with asset allocation adjusted over time as the target date approaches.",
-    holdings: [],
+    holdings: ["Schroder ISF QEP Global Core", "Schroder Global Quality Bond", "Schroder Singapore Fixed Income", "Schroder ISF Asian Opportunities", "Schroder ISF Emerging Markets"],
     returns: { "1y": "+4.00%", "3y": "+10.35%", "5y": "+3.26%", "10y": "+5.69%", "inception": "+4.10%" }
   },
   {
@@ -831,7 +833,7 @@ const CPF_FUNDS = [
     slug: "prulink-asian-income-and-growth-fund-accumulation",
     risk: "Medium to High Risk", bidPrice: "1.7382", offerPrice: "1.8297",
     objective: "To provide income and capital growth by investing in a diversified portfolio of Asian equities and fixed-income securities.",
-    holdings: [],
+    holdings: ["Taiwan Semiconductor Manufacturing Co Ltd", "Samsung Electronics Co Ltd", "SK Hynix Inc", "Tencent Holdings Ltd", "MediaTek Inc"],
     returns: { "1y": "+4.77%", "3y": "+9.56%", "5y": "+1.43%", "10y": "+4.60%", "inception": "+4.69%" }
   },
   {
@@ -839,7 +841,7 @@ const CPF_FUNDS = [
     slug: "prulink-global-managed-fund",
     risk: "Medium to High Risk", bidPrice: "2.7510", offerPrice: "2.8957",
     objective: "To maximise long-term total return by investing in a globally diversified portfolio of equities, bonds and other securities.",
-    holdings: [],
+    holdings: ["Schroder ISF US Large Cap", "Schroder ISF QEP Global Core", "Schroder Global Quality Bond", "Schroder ISF Global Equity Alpha", "Singapore 20-Year Government Bonds"],
     returns: { "1y": "+4.64%", "3y": "+11.15%", "5y": "+4.05%", "10y": "+6.50%", "inception": "+3.90%" }
   },
   {
@@ -847,7 +849,7 @@ const CPF_FUNDS = [
     slug: "prulink-singapore-asean-managed-fund",
     risk: "Medium to High Risk", bidPrice: "1.3901", offerPrice: "1.4632",
     objective: "To provide long-term capital growth by investing in a diversified portfolio of Singapore and ASEAN equities and fixed-income securities.",
-    holdings: [],
+    holdings: ["Oversea-Chinese Banking Corp Ltd", "DBS Group Holdings Ltd", "United Overseas Bank Ltd", "Singapore Telecommunications Ltd", "Tenaga Nasional BHD"],
     returns: { "1y": "-0.50%", "3y": "+5.54%", "5y": "+2.15%", "10y": "+2.85%", "inception": "+2.63%" }
   },
   {
@@ -871,7 +873,7 @@ const CPF_FUNDS = [
     slug: "prulink-global-equity-fund",
     risk: "Higher Risk", bidPrice: "2.7244", offerPrice: "2.8677",
     objective: "To maximise long-term total return through investment in equity securities of companies across global markets.",
-    holdings: [],
+    holdings: ["Taiwan Semiconductor MFG Co Ltd", "Roche Holding AG", "Deutsche Boerse AG", "Unilever PLC", "Vinci SA"],
     returns: { "1y": "+15.10%", "3y": "+16.61%", "5y": "+8.89%", "10y": "+9.23%", "inception": "+3.87%" }
   },
   {
@@ -1017,7 +1019,7 @@ function renderCards() {
 }
 
 function renderCard(f) {
-  const riskClass = f.risk.includes('Lower') ? 'lower' : (f.risk.includes('Higher') ? 'higher' : '');
+  const riskClass = f.risk.includes('Lower') ? 'lower' : f.risk.includes('Higher') ? 'higher' : f.risk === 'Low to Medium Risk' ? 'low-medium' : '';
   const id = 'card-' + f.code + '-' + currentTab;
   return `
     <div class="fund-card">
@@ -1095,7 +1097,7 @@ function renderTableRow(f) {
   return `<tr>
     <td>
       <a href="${fundUrl(f)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${f.name}</a>
-      <span class="risk-badge ${f.risk.includes('Lower') ? 'lower' : (f.risk.includes('Higher') ? 'higher' : '')}" style="font-size:0.6rem;margin-left:6px;vertical-align:middle">${f.risk}</span>
+      <span class="risk-badge ${f.risk.includes('Lower') ? 'lower' : f.risk.includes('Higher') ? 'higher' : f.risk === 'Low to Medium Risk' ? 'low-medium' : ''}" style="font-size:0.6rem;margin-left:6px;vertical-align:middle">${f.risk}</span>
       <button class="expand-btn" onclick="toggleTableDetail('${id}', this)"><span class="chevron">▶</span> Info</button>
     </td>
     ${['1y','3y','5y','10y'].map(p => {
